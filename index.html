@@ -1,74 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 BLE Provisioning</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 500px; margin: 0 auto; padding: 20px; }
-        label, input { display: block; margin-bottom: 10px; }
-        button { padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-    </style>
-</head>
+<html>
 <body>
-    <div class="container">
-        <h1>ESP32 Wi-Fi Provisioning</h1>
-        <label for="ssid">Wi-Fi SSID:</label>
-        <input type="text" id="ssid" name="ssid">
-        
-        <label for="password">Wi-Fi Password:</label>
-        <input type="password" id="password" name="password">
-        
-        <button id="connect">Connect to ESP32 via Bluetooth</button>
-        <p id="status"></p>
-    </div>
-
-    <script>
-        const connectButton = document.getElementById('connect');
-        const statusText = document.getElementById('status');
-
-        let bleDevice, bleServer, bleService, bleCharacteristic;
-
-        connectButton.addEventListener('click', async () => {
-            const ssid = document.getElementById('ssid').value;
-            const password = document.getElementById('password').value;
-
-            if (!ssid || !password) {
-                statusText.textContent = "Please enter both SSID and Password.";
-                return;
-            }
-
-            try {
-                // Request Bluetooth device with specific service UUID
-                bleDevice = await navigator.bluetooth.requestDevice({
-                    filters: [{ namePrefix: 'PROV_' }],
-                    optionalServices: ['your-service-uuid-here'] // Replace with actual service UUID
-                });
-
-                statusText.textContent = `Connecting to ${bleDevice.name}...`;
-
-                // Connect to the device's GATT server
-                bleServer = await bleDevice.gatt.connect();
-
-                // Get the provisioning service
-                bleService = await bleServer.getPrimaryService('your-service-uuid-here'); // Replace with actual service UUID
-
-                // Get the characteristic for Wi-Fi credentials
-                bleCharacteristic = await bleService.getCharacteristic('your-characteristic-uuid-here'); // Replace with actual characteristic UUID
-
-                // Send the Wi-Fi credentials (SSID and password)
-                const encoder = new TextEncoder();
-                const data = encoder.encode(`${ssid},${password}`);
-                await bleCharacteristic.writeValue(data);
-
-                statusText.textContent = `Wi-Fi credentials sent to ${bleDevice.name}`;
-
-            } catch (error) {
-                statusText.textContent = `Error: ${error.message}`;
-            }
-        });
-    </script>
+<h1>Hello World</h1>
+<p>I'm hosted with GitHub Pages.</p>
 </body>
 </html>
